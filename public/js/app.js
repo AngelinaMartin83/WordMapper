@@ -1,3 +1,4 @@
+\
 // 前端逻辑：界面与元素ID保持不变，调用 /api/align 获取结果
 const $ = (id) => document.getElementById(id);
 const out = $('out');
@@ -6,24 +7,16 @@ const ipaInput = $('ipaInput');
 const dictInfo = $('dictInfo');
 const dictError = $('dictError');
 
-// 更稳健的转义函数，避免复杂正则里的引号转义问题
 function esc(s){
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   return String(s).replace(/[&<>"']/g, ch => map[ch]);
 }
-
 function p(html){ const el=document.createElement('p'); el.innerHTML=html; return el; }
 
-// UI 事件绑定（界面不变）
 $('runBtn')?.addEventListener('click', runAll);
 $('clearBtn')?.addEventListener('click', ()=>{ out.innerHTML=''; });
-$('sampleBtn')?.addEventListener('click', ()=>{
-  // 仅提示：生产环境使用服务器字典；如需本地示例，可自己改造
-  dictError.textContent='生产环境使用服务器端字典；当前按钮不再加载本地示例。';
-});
-$('dictFile')?.addEventListener('change', ()=>{
-  dictError.textContent='生产环境使用服务器端字典；如需自定义字典，请联系管理员在后端更新。';
-});
+$('sampleBtn')?.addEventListener('click', ()=>{ dictError.textContent='生产环境使用服务器端字典；当前按钮不再加载本地示例。'; });
+$('dictFile')?.addEventListener('change', ()=>{ dictError.textContent='生产环境使用服务器端字典；如需自定义字典，请联系管理员在后端更新。'; });
 
 wordsEl?.addEventListener('keydown', (e)=>{
   if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); runAll(); }
@@ -37,7 +30,7 @@ function showDictInfoServer(){
 showDictInfoServer();
 
 async function runAll(){
-  const lines=(wordsEl?.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  const lines=(wordsEl?.value||'').split(/\\r?\\n/).map(s=>s.trim()).filter(Boolean);
   if(!lines.length){ alert('请先输入至少一个单词'); return; }
   out.innerHTML='';
   for(const w of lines){ await runOne(w); }
@@ -59,12 +52,13 @@ function prettifyWordIPAWithOptionalR(word, phonemes){
 
 async function runOne(word){
   try{
+    const headers = { 'Content-Type':'application/json' };
+    if (window.AUTH_TOKEN) headers['Authorization'] = 'Bearer ' + window.AUTH_TOKEN;
+
     const resp = await fetch('/api/align', {
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer ' + (window.AUTH_TOKEN || 'dev-token')
-      },
+      credentials: 'include', // 关键：携带/发送 httpOnly Cookie
+      headers,
       body: JSON.stringify({ words:[word], ipaOverride: (ipaInput?.value||'').trim() || null })
     });
     if(!resp.ok){
