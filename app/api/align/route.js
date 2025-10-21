@@ -1,7 +1,9 @@
+// app/api/align/route.js
 import { NextResponse } from 'next/server';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ForcedAligner } from '@/lib/aligner';
+import { verifySession } from '@/lib/auth';
 
 export const runtime = 'nodejs';
 
@@ -11,10 +13,19 @@ function loadDict() {
   return JSON.parse(raw);
 }
 
-export async function POST(req) {
+function isAuthorized(req) {
+  const serverToken = process.env.AUTH_TOKEN || '';
+  // 1) Cookie 会话优先
+  const sess = verifySession(req, serverToken);
+  if (sess) return true;
+  // 2) 兼容旧的 Bearer 方式，便于平滑迁移
   const auth = req.headers.get('authorization') || '';
-  const token = process.env.AUTH_TOKEN || '';
-  if (!token || auth !== `Bearer ${token}`) {
+  if (serverToken && auth === `Bearer ${serverToken}`) return true;
+  return false;
+}
+
+export async function POST(req) {
+  if (!isAuthorized(req)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
