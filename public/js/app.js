@@ -6,7 +6,12 @@ const ipaInput = $('ipaInput');
 const dictInfo = $('dictInfo');
 const dictError = $('dictError');
 
-function esc(s){ return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;",""":"&quot;","'":"&#39;"}[m])); }
+// 更稳健的转义函数，避免复杂正则里的引号转义问题
+function esc(s){
+  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  return String(s).replace(/[&<>"']/g, ch => map[ch]);
+}
+
 function p(html){ const el=document.createElement('p'); el.innerHTML=html; return el; }
 
 // UI 事件绑定（界面不变）
