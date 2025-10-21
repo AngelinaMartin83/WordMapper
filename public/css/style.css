@@ -1,0 +1,133 @@
+/* =========================================
+   🎨 Word Mapper - 儿童版样式 (style.css)
+   ========================================= */
+
+
+    :root{
+      --bg:#FFFBF2; --ink:#223; --panel:#FFFFFF; --primary:#6C8DFF; --primary-dark:#4C6CFF;
+      --accent:#FFB84D; --green:#1DB954; --muted:#58607A; --line:#E8ECF8; --chip:#F5F7FF;
+    }
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 ui-rounded,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .wrap{max-width:980px;margin:24px auto;padding:0 16px}
+    header{display:flex;align-items:center;gap:12px;margin:8px 0 16px}
+    .logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8cd5ff);display:grid;place-items:center;color:#fff;font-weight:900;box-shadow:0 6px 16px rgba(80,120,255,.25)}
+    h1{font-size:26px;margin:0;font-weight:900;letter-spacing:.5px}
+    .sub{color:var(--muted);font-size:14px}
+
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:0 8px 18px rgba(0,0,0,.04)}
+    .pane{padding:18px}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+
+    label{display:block;font-weight:800;margin:6px 0 8px}
+    input[type="text"], textarea{width:100%;padding:14px 16px;border-radius:16px;border:2px solid var(--line);background:#fff;color:var(--ink);outline:none;font-size:18px}
+    textarea{min-height:140px}
+    input:focus, textarea:focus{border-color:#b8c5ff;box-shadow:0 0 0 4px rgba(108,141,255,.15)}
+
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{appearance:none;border:none;background:var(--primary);color:#fff;padding:14px 18px;border-radius:16px;font-weight:900;cursor:pointer;font-size:18px;letter-spacing:.3px;box-shadow:0 8px 16px rgba(76,108,255,.25)}
+    .btn:active{transform:translateY(1px)}
+    .btn.ghost{background:#fff;color:#233;border:2px solid var(--line);box-shadow:none}
+    .btn.small{padding:10px 12px;border-radius:14px;font-size:15px}
+
+    .how{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 0}
+    .tip{background:var(--chip);border:1px dashed #d9e1ff;color:#3a4a7a;border-radius:999px;padding:6px 10px;font-weight:700}
+
+    .tag{display:inline-flex;align-items:center;gap:6px;background:#eef3ff;border:1px solid #dfe7ff;color:#3a4a7a;font-weight:800;border-radius:999px;padding:6px 10px}
+    .cost{background:#fff7ea;border:1px solid #ffe1a3;color:#8a5a00}
+
+    /* 纵向大字号对齐块（儿童友好） */
+    .pairs{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+    .pair{display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid var(--line);border-radius:18px;padding:14px;background:#fff}
+    .pair .g{font-weight:900;font-size:40px;line-height:1}
+    .pair .arrow{margin:6px 0;font-size:22px;color:#8aa}
+    .pair .ipa{font-family:ui-monospace,Consolas,Monaco,monospace;font-size:36px;line-height:1.1}
+    .pair .note{margin-top:6px;font-weight:800}
+    .ok{color:var(--green)}
+    .muted{color:var(--muted)}
+
+    .footer{margin:14px 0 0;color:#8a94a8;font-size:14px}
+    /* 横向两行：上=字母方块，下=发音贴纸 */
+.result-rows{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+/* 顶部输入区域改为占满宽度 */
+.top-area {
+  display: flex;
+  flex-direction: column; /* 垂直排列 */
+  gap: 12px;
+  width: 100%;
+}
+
+/* 输入框和按钮全宽 */
+#words {
+  width: 100%;
+  font-size: 20px;
+  padding: 10px;
+}
+
+/* 结果容器也占整宽度 */
+.results {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* 上排：字母方块 */
+.row-graphemes{display:flex;flex-wrap:wrap;gap:12px}
+.box-g{
+  width:64px;height:64px;display:grid;place-items:center;
+  border:2px solid var(--line); border-radius:10px; background:#fff;
+  font-weight:900;font-size:34px;line-height:1; color:var(--ink);
+}
+.box-g.muted{opacity:.5}
+.box-g.insert{outline:2px dashed #d0d7ff}
+
+/* 下排：发音贴纸 */
+.row-phonemes{display:flex;flex-wrap:wrap;gap:12px}
+.chip-p{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:0px 0px;border-radius:18px;background:#f4a870;color:#222;
+  font-size:18px;line-height:1.1;font-weight:800;box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+.chip-p .ipa{font-family:ui-monospace,Consolas,Monaco,monospace}
+.chip-p.ok{background:#ffd08a}      /* 规则匹配（更亮一点） */
+.chip-p.silent{background:#e9edf7;color:#556} /* 删除/不发音 */
+.chip-p.force{background:#ffd2d2}    /* 强制匹配（淡红） */
+.chip-p.insert{background:#e3f7ff}   /* 插入 */
+.pairs-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(60px, 1fr); /* 每列至少60px，平分宽度 */
+  gap: 12px;
+  justify-content: start;
+  margin-top: 16px;
+}
+
+.pair-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 上：字母方块 */
+.pair-col .g {
+  width: 64px; height: 64px;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--line);
+  border-radius:10px;
+  font-weight:900; font-size:34px;
+  background:#fff;
+}
+
+/* 下：音标贴纸 */
+.pair-col .ipa {
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:18px;
+  background:#f4a870;
+  font-size:18px;
+  font-family: ui-monospace,Consolas,monospace;
+  font-weight:800;
+  box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
