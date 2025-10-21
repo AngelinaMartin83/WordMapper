@@ -1,4 +1,4 @@
-// app/api/align/route.js
+// app/api/align/route.js — prefers httpOnly cookie auth; keeps Bearer fallback
 import { NextResponse } from 'next/server';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,10 +15,10 @@ function loadDict() {
 
 function isAuthorized(req) {
   const serverToken = process.env.AUTH_TOKEN || '';
-  // 1) Cookie 会话优先
+  // 1) Cookie session (httpOnly) via middleware
   const sess = verifySession(req, serverToken);
   if (sess) return true;
-  // 2) 兼容旧的 Bearer 方式，便于平滑迁移
+  // 2) Fallback: Bearer token (for your own debugging if needed)
   const auth = req.headers.get('authorization') || '';
   if (serverToken && auth === `Bearer ${serverToken}`) return true;
   return false;
@@ -43,7 +43,7 @@ export async function POST(req) {
   }
 
   try {
-    const dict = loadDict();
+    const dict = loadDict(); // server-side only
     const aligner = new ForcedAligner();
     aligner.loadIpaDictionary(dict);
 
