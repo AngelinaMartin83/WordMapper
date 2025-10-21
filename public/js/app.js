@@ -1,4 +1,3 @@
-\
 // 前端逻辑：界面与元素ID保持不变，调用 /api/align 获取结果
 const $ = (id) => document.getElementById(id);
 const out = $('out');
