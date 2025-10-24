@@ -72,13 +72,13 @@ async function runOne(word){
     }
     const r = data.results[0];
     if(r.error){ card(word, null, null, r.error); return; }
-    card(word, r.ipa, {pairs:r.pairs, cost:r.cost}, null);
+    card(word, r.ipaDisplay, {pairs:r.pairs, cost:r.cost}, null);
   }catch(err){
     card(word, null, null, String(err));
   }
 }
 
-function card(word, phonemes, res, error){
+function card(word, ipaDisplay, res, error){
   const outEl = document.getElementById('out');
   const box = document.createElement('div'); 
   box.className = 'card'; 
@@ -102,7 +102,7 @@ function card(word, phonemes, res, error){
     return;
   }
 
-  const prettyIPA = prettifyWordIPAWithOptionalR(word, phonemes);
+  const prettyIPA = typeof ipaDisplay === 'string' ? ipaDisplay : '';
   pad.appendChild(
     p(`<div class="muted" style="font-size:18px">音位：
          <span class="mono" style="font-size:22px">/${esc(prettyIPA)}/</span>
