@@ -50,7 +50,13 @@ export async function POST(req) {
     const results = words.map((w) => {
       try {
         const r = aligner.alignWord(w, override);
-        return { word: w, pairs: r.pairs, cost: r.cost, ipa: r.ipa };
+        return {
+          word: w,
+          pairs: r.pairs,
+          cost: r.cost,
+          ipaAligned: r.ipaAligned, // 内部使用（必要时调试）
+          ipaDisplay: r.ipaDisplay   // 前端展示用（完整原始 IPA）
+        };
       } catch (e) {
         return { word: w, error: String(e?.message || e) };
       }
