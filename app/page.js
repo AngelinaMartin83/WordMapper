@@ -11,12 +11,10 @@ export default function Page() {
 
         <div className="grid">
           <section className="pane">
-            <h2 style={{margin:0}}>🔍 查找发音</h2>
-
-            <label>单词</label>
+            <h2 style={{margin:0}}>🔍 查找单词</h2>
             <input id="words" type="text" placeholder="例如：cat 或 information" />
             <div className="row" style={{marginTop:'12px'}}>
-              <button className="btn" id="runBtn">开始对齐 ✅</button>
+              <button className="btn" id="runBtn">提交 ✅</button>
               <button className="btn ghost" id="clearBtn">清空结果</button>
             </div>
 
