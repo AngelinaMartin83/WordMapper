@@ -11,7 +11,7 @@ export default function Page() {
 
         <div className="grid">
           <section className="pane">
-            <h2 style={{margin:20}}>🔍 查找单词</h2>
+            <h2 style={{ marginTop: 0, marginBottom: 20 }}>🔍 查找单词</h2>
             <input id="words" type="text" placeholder="例如：cat 或 information" />
             <div className="row" style={{marginTop:'12px'}}>
               <button className="btn" id="runBtn">提交 ✅</button>
