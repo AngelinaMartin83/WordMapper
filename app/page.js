@@ -5,7 +5,7 @@ export default function Page() {
       <header>
         <div className="logo">Aa</div>
         <div>
-          <h1>Word Mapper · 杨一恺版本</h1>
+          <h1>Word Mapper</h1>
         </div>
       </header>
 
