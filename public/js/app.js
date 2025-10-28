@@ -101,7 +101,7 @@ function card(word, ipaDisplay, res, error){
   head.style.justifyContent = 'space-between'; 
   head.style.alignItems = 'center';
   head.innerHTML = `<div style="font-size:28px;font-weight:900">${esc(word)}</div>` +
-                   (res ? `<span class="tag cost">总代价 cost = ${res.cost}</span>` : '');
+                 (res && window.__SHOW_COST__ ? `<span class="tag cost">总代价 cost = ${res.cost}</span>` : '');
   pad.appendChild(head);
 
   if (error){
