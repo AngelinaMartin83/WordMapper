@@ -143,7 +143,7 @@ function card(word, ipaDisplay, res, error){
     else if (op === 'force_match') chip.classList.add('force');
 
     chip.innerHTML = (p === '（沉默）' || op === 'del')
-      ? 'silent'
+      ? ''
       : `<span class="ipa">/${esc(p)}/</span>`;
 
     col.appendChild(chip);
