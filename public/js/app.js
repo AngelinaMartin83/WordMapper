@@ -1,3 +1,11 @@
+// 简单 URL 参数控制：?showCost=1 开启显示
+const params = new URLSearchParams(window.location.search);
+window.__SHOW_COST__ = params.get('showCost') === '1';
+
+// 如果想用 CSS 控制隐藏/显示，可以给 body 加个类名
+if (window.__SHOW_COST__) {
+  document.body.classList.add('show-cost');
+}
 // 前端逻辑：界面与元素ID保持不变，调用 /api/align 获取结果
 const $ = (id) => document.getElementById(id);
 const out = $('out');
