@@ -30,6 +30,7 @@ wordsEl?.addEventListener('keydown', (e)=>{
 });
 
 function showDictInfoServer(){
+  if (!dictInfo) return; 
   dictInfo.innerHTML='';
   const a=document.createElement('span'); a.className='tag'; a.textContent=`词条：后端私有字典`; dictInfo.appendChild(a);
   const b=document.createElement('span'); b.className='tag'; b.textContent=`来源：server-data/beep_uk_ipa.json`; dictInfo.appendChild(b);
