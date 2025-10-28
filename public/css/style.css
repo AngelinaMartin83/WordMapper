@@ -36,6 +36,16 @@
 
     .tag{display:inline-flex;align-items:center;gap:6px;background:#eef3ff;border:1px solid #dfe7ff;color:#3a4a7a;font-weight:800;border-radius:999px;padding:6px 10px}
     .cost{background:#fff7ea;border:1px solid #ffe1a3;color:#8a5a00}
+/* 默认隐藏 cost（不带 show-cost 类时） */
+.tag.cost {
+  display: none;
+}
+
+/* 当 URL 参数触发时显示 cost */
+body.show-cost .tag.cost {
+  display: inline-block;
+}
+
 
     /* 纵向大字号对齐块（儿童友好） */
     .pairs{display:flex;flex-direction:column;gap:12px;margin-top:10px}
