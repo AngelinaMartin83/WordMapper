@@ -6,7 +6,7 @@ export default function Page() {
       <header>
         <div className="logo">Aa</div>
         <div>
-          <h1>SoundWhy · 英语自然拼读与音标映射工具</h1>
+          <h1>SoundWhy.com · 英语自然拼读与音标映射工具</h1>
         </div>
       </header>
 
@@ -46,11 +46,7 @@ export default function Page() {
 
         <p>
           <strong>SoundWhy</strong> 是一个免费的英语
-          <strong>自然拼读（Phonics）</strong> 与
-          <strong>音标可视化发音工具</strong>。
-          你只需输入英文单词，系统会从内置词库中自动获取对应的
-          <strong> IPA 音标</strong>，
-          并展示字母与音标之间的对应关系。
+         自然拼读（Phonics）与音标可视化发音工具。你只需输入英文单词，系统会获取对应的 IPA 音标，并展示字母与音标之间的对应关系。
         </p>
 
         <p>
@@ -70,7 +66,7 @@ export default function Page() {
         </p>
 
         <p style={{ fontSize: '0.9em', color: '#666', marginTop: '16px' }}>
-          © {new Date().getFullYear()} SoundWhy.com · 英语自然拼读与音标学习平台
+          © {new Date().getFullYear()} SoundWhy.com · 英语自然拼读与音标学习网站
         </p>
       </div>
     </div>
