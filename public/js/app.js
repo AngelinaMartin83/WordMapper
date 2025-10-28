@@ -112,7 +112,7 @@ function card(word, ipaDisplay, res, error){
 
   const prettyIPA = typeof ipaDisplay === 'string' ? ipaDisplay : '';
   pad.appendChild(
-    p(`<div class="muted" style="font-size:18px">音位：
+    p(`<div class="muted" style="font-size:18px">音标：
          <span class="mono" style="font-size:22px">/${esc(prettyIPA)}/</span>
        </div>`)
   );
