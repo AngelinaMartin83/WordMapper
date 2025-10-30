@@ -162,8 +162,8 @@ body.show-cost .tag.cost {
   .pairs-grid {
     display: grid;
     grid-auto-flow: row;
-    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 7px;
     margin-top: 14px;
   }
 
@@ -173,14 +173,14 @@ body.show-cost .tag.cost {
   /* 尺寸缩放 */
   .pair-col .g,
   .box-g {
-    width: 32px; height: 32px;
+    width: 35px; height: 35px;
     font-size: 16px;
     border-radius: 8px;
   }
 
   .pair-col .ipa,
   .chip-p {
-    font-size: 16px;
+    font-size: 14px;
     padding:0px 0px;
     border-radius: 14px;
   }
