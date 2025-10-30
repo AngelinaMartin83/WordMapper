@@ -86,7 +86,7 @@ body.show-cost .tag.cost {
 .box-g{
   width:64px;height:64px;display:grid;place-items:center;
   border:2px solid var(--line); border-radius:10px; background:#fff;
-  font-weight:900;font-size:34px;line-height:1; color:var(--ink);
+  font-weight:900;font-size:24px;line-height:1; color:var(--ink);
 }
 .box-g.muted{opacity:.5}
 .box-g.insert{outline:2px dashed #d0d7ff}
