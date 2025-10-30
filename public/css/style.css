@@ -168,7 +168,7 @@ body.show-cost .tag.cost {
   }
 
   /* 只保留一层颜色：去掉外层背景/阴影 */
-  .pair-col { background: transparent !important; box-shadow: none !important; }
+  .chip-p.ok{background:none}      /* 规则匹配（更亮一点） */
 
   /* 尺寸缩放 */
   .pair-col .g,
@@ -181,8 +181,8 @@ body.show-cost .tag.cost {
   .pair-col .ipa,
   .chip-p {
     font-size: 14px;
-    padding:0px 0px;
-    border-radius: 14px;
+    padding:3px 0px;
+    border-radius: 3px;
   }
 }
 
