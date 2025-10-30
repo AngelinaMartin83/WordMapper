@@ -144,7 +144,6 @@ body.show-cost .tag.cost {
 /* =========================
    📱 Mobile responsiveness
    ========================= */
-
 /* 全局：容器与卡片不溢出，结果区允许换行 */
 .wrap { padding: 0 12px; max-width: 980px; box-sizing: border-box; }
 .card, .results, .pane { max-width: 100%; box-sizing: border-box; }
@@ -168,43 +167,23 @@ body.show-cost .tag.cost {
     margin-top: 14px;
   }
 
-  /* —— 只保留一层颜色：去掉外层背景/阴影（可能在不同容器或伪元素上） —— */
-  .pair,
-  .pair-col,
-  .pair-wrap,
-  .pair .pad { background: transparent !important; box-shadow: none !important; }
+  /* 只保留一层颜色：去掉外层背景/阴影 */
+  .pair-col { background: transparent !important; box-shadow: none !important; }
 
-  .pair::before,
-  .pair::after,
-  .pair-col::before,
-  .pair-col::after { display: none !important; content: none !important; }
-
-  /* 尺寸缩放（用 clamp 做自适应上/下限） */
+  /* 尺寸缩放 */
   .pair-col .g,
   .box-g {
-    width: clamp(28px, 9vw, 32px);
-    height: clamp(28px, 9vw, 32px);
-    font-size: clamp(14px, 5vw, 16px);
+    width: 32px; height: 32px;
+    font-size: 16px;
     border-radius: 8px;
   }
 
   .pair-col .ipa,
   .chip-p {
-    font-size: clamp(12px, 3.8vw, 14px);
+    font-size: 16px;
     padding: 6px 10px;
     border-radius: 14px;
-    white-space: nowrap;              /* 音标不换行 */
-    box-shadow: none;                 /* 避免出现第二层阴影 */
   }
-
-  /* 长单词/整行一行显示：不换行，间距收紧（如仍溢出，后续可配合JS缩放） */
-  .row-graphemes,
-  .row-phonemes {
-    display: inline-flex;
-    flex-wrap: nowrap;               /* 禁止换行，保持一行 */
-    gap: 6px;
-  }
-
-  /* 结果容器防横向滚动条 */
-  .results { overflow-x: hidden; }
 }
+
+
