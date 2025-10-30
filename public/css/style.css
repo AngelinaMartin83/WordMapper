@@ -152,72 +152,46 @@ body.show-cost .tag.cost {
 
 /* 2) 小屏：缩小间距与按钮尺寸 */
 @media (max-width: 768px) {
-  .pane { padding: 14px; }
-  .row { gap: 8px; }
-  .btn { padding: 12px 14px; font-size: 16px; border-radius: 14px; }
-  .btn.small { padding: 8px 10px; font-size: 14px; }
-}
-
-/* 3) 小屏：栅格单列显示（你已有一条到 920px 的断点，再细化到更小） */
-@media (max-width: 640px) {
+  .wrap { padding: 0 12px; box-sizing: border-box; }
   .grid { grid-template-columns: 1fr; }
-}
+  .pane { padding: 14px; }
 
-/* 4) 结果「纵向大字号对齐块」在小屏缩放 */
-@media (max-width: 640px) {
-  .pairs { gap: 10px; }
-  .pair { padding: 10px; border-radius: 14px; }
-  .pair .g { font-size: 30px; }
-  .pair .ipa { font-size: 26px; }
-  .pair .arrow { font-size: 18px; margin: 4px 0; }
-}
+  .btn { padding: 12px 14px; font-size: 16px; border-radius: 14px; }
 
-/* 5) 横向两行（上=字母方块，下=音标贴纸）在小屏缩放 */
-@media (max-width: 640px) {
-  .row-graphemes, .row-phonemes { gap: 8px; }
-
-  /* 字母方块缩小且保留触控舒适度 */
-  .box-g {
-    width: 48px; height: 48px;
-    font-size: 26px; border-radius: 8px;
-  }
-
-  /* 音标贴纸缩小并可换行 */
-  .chip-p {
-    padding: 6px 10px;
-    font-size: 16px;
-    border-radius: 14px;
-    max-width: 100%;
-  }
-}
-
-/* 6) 关键：pairs-grid 在小屏改为自动换行，而不是强制横排 */
-@media (max-width: 640px) {
   .pairs-grid {
     display: grid;
-    grid-auto-flow: row; /* ← 由 column 改为 row，允许纵向扩展 */
-    grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
     gap: 10px;
     margin-top: 14px;
   }
 
   .pair-col .g {
     width: 48px; height: 48px;
-    font-size: 26px; border-radius: 8px;
+    font-size: 26px;
+    border-radius: 8px;
   }
 
   .pair-col .ipa {
-    padding: 8px 10px;
     font-size: 16px;
+    padding: 6px 10px;
     border-radius: 14px;
-    max-width: 100%;
   }
-}
 
-/* 7) 极小屏（如 360–400px）：再进一步缩小 */
-@media (max-width: 400px) {
-  .box-g { width: 42px; height: 42px; font-size: 22px; }
-  .chip-p { font-size: 15px; padding: 6px 8px; }
-  .pair-col .g { width: 42px; height: 42px; font-size: 22px; }
-  .pair-col .ipa { font-size: 15px; padding: 6px 8px; }
+  .box-g {
+    width: 48px; height: 48px;
+    font-size: 26px;
+  }
+
+  .chip-p {
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 14px;
+  }
+
+  .results {
+    overflow-x: hidden;
+    word-wrap: break-word;
+    width: 100%;
+  }
 }
