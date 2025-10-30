@@ -157,7 +157,8 @@ body.show-cost .tag.cost {
 
   /* 按钮 */
   .btn { padding: 12px 14px; font-size: 16px; border-radius: 14px; }
-.h1{font-size: 18px;}
+     /* H1 */
+h1{font-size: 18px;}
   /* 结果网格：纵向自动换行 */
   .pairs-grid {
     display: grid;
