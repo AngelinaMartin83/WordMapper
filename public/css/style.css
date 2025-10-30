@@ -181,7 +181,7 @@ body.show-cost .tag.cost {
   .pair-col .ipa,
   .chip-p {
     font-size: 16px;
-
+    padding:0px 0px;
     border-radius: 14px;
   }
 }
