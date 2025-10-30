@@ -145,23 +145,21 @@ body.show-cost .tag.cost {
    📱 Mobile responsiveness
    ========================= */
 
-/* 1) 通用：容器与卡片不溢出，结果区允许软换行 */
+/* 全局：容器与卡片不溢出，结果区允许换行 */
 .wrap { padding: 0 12px; max-width: 980px; box-sizing: border-box; }
 .card, .results, .pane { max-width: 100%; box-sizing: border-box; }
-.results { overflow-x: hidden; word-wrap: break-word; }
+.results { overflow-x: hidden; overflow-wrap: anywhere; }
 
-/* 2) 小屏：缩小间距与按钮尺寸 */
+/* 手机端（≤768px） */
 @media (max-width: 768px) {
-  /* 布局与容器 */
-  .wrap { padding: 0 12px; box-sizing: border-box; }
+  /* 布局 */
   .grid { grid-template-columns: 1fr; }
   .pane { padding: 14px; }
-  .results { overflow-x: hidden; word-wrap: break-word; width: 100%; }
 
   /* 按钮 */
   .btn { padding: 12px 14px; font-size: 16px; border-radius: 14px; }
 
-  /* 结果网格：改为纵向自动换行 */
+  /* 结果网格：纵向自动换行 */
   .pairs-grid {
     display: grid;
     grid-auto-flow: row;
@@ -170,17 +168,14 @@ body.show-cost .tag.cost {
     margin-top: 14px;
   }
 
-  /* —— 只保留一层颜色：去掉外层背景 —— */
-  .pair-col {
-    background: transparent !important;   /* 去除外层浅色背景 */
-    box-shadow: none !important;          /* 若外层有阴影也移除，避免“叠层”观感 */
-  }
+  /* 只保留一层颜色：去掉外层背景/阴影 */
+  .pair-col { background: transparent !important; box-shadow: none !important; }
 
-  /* 大小缩放 */
+  /* 尺寸缩放 */
   .pair-col .g,
   .box-g {
-    width: 48px; height: 48px;
-    font-size: 26px;
+    width: 28px; height: 28px;
+    font-size: 16px;
     border-radius: 8px;
   }
 
@@ -189,6 +184,5 @@ body.show-cost .tag.cost {
     font-size: 16px;
     padding: 6px 10px;
     border-radius: 14px;
-    /* 保留内层（实际显示的标签）背景色为桌面端样式，形成单层颜色效果 */
   }
 }
