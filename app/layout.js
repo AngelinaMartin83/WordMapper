@@ -41,6 +41,7 @@ export default function RootLayout({ children }) {
   // 样式以 <link> 形式放在 body 尾部也能生效；JS 用 next/script 注入
   return (
     <html lang="zh-CN">
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="e7c240c0-dd0b-45cf-8932-ace04e6e0a93"></script>
       <body>
         {children}
         {/* 样式（保留原路径）： */}
