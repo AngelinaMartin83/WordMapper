@@ -26,6 +26,7 @@ export default function Page() {
         autoCapitalize="none"
         spellCheck={false}
       />
+          </form>
           <div className="row" style={{ marginTop: '12px' }}>
             <button className="btn" id="runBtn">提交 ✅</button>
             <button className="btn ghost" id="clearBtn">清空结果</button>
