@@ -43,6 +43,8 @@ export default function RootLayout({ children }) {
     <html lang="zh-CN">
     
       <body>
+    {/*  Umami 跟踪脚本：放在 body 内部 */}
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="e7c240c0-dd0b-45cf-8932-ace04e6e0a93"></script>
         {children}
         {/* 样式（保留原路径）： */}
         <link rel="stylesheet" href="/css/style.css" />
