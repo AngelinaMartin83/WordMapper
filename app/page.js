@@ -14,25 +14,7 @@ export default function Page() {
       <div className="grid">
         <section className="pane">
           <h2 style={{ marginTop: 0, marginBottom: 20 }}>🔍 查找单词</h2>
-             {/* 浏览器自动保存历史的表单 */}
-    <form
-      id="searchForm"
-      autoComplete="on"
-      onSubmit={(e) => e.preventDefault()}   // 阻止默认提交（防止刷新页面）
-    >
-      <input
-        id="words"
-        name="search"               // ⭐ 关键：稳定、语义化的 name，浏览器用它记历史
-        type="search"               // ⭐ 建议用 search，浏览器会当搜索框处理
-        placeholder="例如：cat"
-        autoComplete="on"           // ⭐ 开启自动填充
-        autoCorrect="off"
-        autoCapitalize="none"
-        spellCheck={false}
-      />
-      {/* ⭐ 隐藏的 submit，用来让浏览器“有一次真正的提交事件” */}
-      <button type="submit" style={{ display: 'none' }} />
-    </form>
+ <input id="words" type="text" placeholder="例如：cat" />
           <div className="row" style={{ marginTop: '12px' }}>
             <button className="btn" id="runBtn">提交 ✅</button>
             <button className="btn ghost" id="clearBtn">清空结果</button>
