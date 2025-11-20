@@ -186,5 +186,14 @@ h1{font-size: 18px;}
     border-radius: 3px;
   }
 }
+/* 可点击的音标块 */
+.chip-p.clickable {
+  cursor: pointer;
+}
 
+.chip-p.clickable:hover {
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+  transition: all 0.12s ease-out;
+}
 
