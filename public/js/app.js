@@ -13,7 +13,89 @@ const wordsEl = $('words');
 const ipaInput = $('ipaInput');
 const dictInfo = $('dictInfo');
 const dictError = $('dictError');
+// ==== 音标音频播放配置 ====
 
+// 音频文件基础路径（放在 public/audio/phonemes/ 目录下）
+const PHONEME_AUDIO_BASE = '/audio/phonemes/';
+const PHONEME_AUDIO_EXT = '.mp3';
+
+// 从你提供的 IPA 对照表提取出来的映射：音标 -> 文件名（不含路径和后缀）
+const PHONEME_AUDIO_MAP = {
+  'iː': '01_ee_see_words',
+  'ɑː': '02_a_car_words',
+  'ɔː': '03_o_ball_words',
+  'uː': '04_oo_food_words',
+  'ɜː': '05_ir_bird_words',
+  'ɪ':  '06_i_ship_words',
+  'ʊ':  '07_oo_book_words',
+  'e':  '08_e_bed_words',
+  'æ':  '09_a_cat_words',
+  'ʌ':  '10_u_cup_words',
+  'ɒ':  '11_o_dog_words',
+  'ə':  '12_e_pencil_words',
+  'eɪ': '13_ei_rain_words',
+  'aɪ': '14_ai_kite_words',
+  'ɔɪ': '15_oi_boy_words',
+  'aʊ': '16_au_house_words',
+  'əʊ': '17_o_snow_words',
+  'ɪə': '18_ear_ear_words',
+  'eə': '19_air_chair_words',
+  'ʊə': '20_our_tour_words',
+  'p':  '21_p_pig_words',
+  'b':  '22_b_bag_words',
+  't':  '23_t_ten_words',
+  'd':  '24_d_door_words',
+  'k':  '25_k_cat_words',
+  'g':  '26_g_game_words',
+  'f':  '27_f_fish_words',
+  'v':  '28_v_five_words',
+  'θ':  '29_th_think_words',
+  'ð':  '30_th_father_words',
+  's':  '31_s_sun_words',
+  'z':  '32_z_zoo_words',
+  'ʃ':  '33_sh_machine_words',
+  'ʒ':  '34_sh_measure_words',
+  'tʃ': '35_ch_chair_words',
+  'dʒ': '36_ch_bridge_words',
+  'm':  '37_m_monkey_words',
+  'n':  '38_n_nose_words',
+  'ŋ':  '39_ng_sing_words',
+  'h':  '40_h_hat_words',
+  'l':  '41_l_bell_words',
+  'r':  '42_r_red_words',
+  'j':  '43_j_yes_words',
+  'w':  '44_w_what_words',
+  'dr': '45_dr_drink_words',
+  'dz': '46_dz_kids_words',
+  'tr': '47_tr_tree_words',
+  'ts': '48_ts_fruits_words',
+};
+
+// 复用一个 Audio 实例，避免多音频叠加
+let phonemeAudio = null;
+
+function getPhonemeAudioUrl(phoneme) {
+  const key = String(phoneme || '').trim();
+  if (!key) return null;
+  const fileKey = PHONEME_AUDIO_MAP[key];
+  if (!fileKey) return null;
+  return PHONEME_AUDIO_BASE + fileKey + PHONEME_AUDIO_EXT;
+}
+
+function playPhoneme(phoneme) {
+  const url = getPhonemeAudioUrl(phoneme);
+  if (!url) return;
+  try {
+    if (!phonemeAudio) phonemeAudio = new Audio();
+    phonemeAudio.src = url;
+    phonemeAudio.currentTime = 0;
+    phonemeAudio.play().catch(() => {
+      console.warn('无法播放音标音频：', phoneme, url);
+    });
+  } catch (e) {
+    console.warn('播放音频出错：', e);
+  }
+}
 function esc(s){
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
   return String(s).replace(/[&<>"']/g, ch => map[ch]);
@@ -36,7 +118,17 @@ function showDictInfoServer(){
   const b=document.createElement('span'); b.className='tag'; b.textContent=`来源：server-data/beep_uk_ipa.json`; dictInfo.appendChild(b);
 }
 showDictInfoServer();
-
+// 在结果区域上做事件代理：点击音标块播放音频
+if (out) {
+  out.addEventListener('click', (e) => {
+    // 找到最近的 .chip-p.clickable 元素
+    const chip = e.target.closest('.chip-p.clickable');
+    if (!chip) return;
+    const phoneme = chip.dataset.phoneme;
+    if (!phoneme) return;
+    playPhoneme(phoneme);
+  });
+}
 async function runAll(){
   const lines=(wordsEl?.value||'').split(/\\r?\\n/).map(s=>s.trim()).filter(Boolean);
   if(!lines.length){ alert('请先输入至少一个单词'); return; }
@@ -134,7 +226,7 @@ function card(word, ipaDisplay, res, error){
     if (op === 'ins') gBox.classList.add('insert');
     col.appendChild(gBox);
 
-    const chip = document.createElement('div');
+        const chip = document.createElement('div');
     chip.className = 'chip-p';
 
     if (op === 'del') chip.classList.add('silent');
@@ -142,9 +234,15 @@ function card(word, ipaDisplay, res, error){
     else if (op === 'match') chip.classList.add('ok');
     else if (op === 'force_match') chip.classList.add('force');
 
-    chip.innerHTML = (p === '（沉默）' || op === 'del')
-      ? ''
-      : `<span class="ipa">/${esc(p)}/</span>`;
+    if (p === '（沉默）' || op === 'del' || !p) {
+      // 沉默/删除：不显示音标，也不绑定音频
+      chip.innerHTML = '';
+    } else {
+      // 正常有音标：展示并挂上 data-phoneme，供点击播放
+      chip.innerHTML = `<span class="ipa">/${esc(p)}/</span>`;
+      chip.dataset.phoneme = p;
+      chip.classList.add('clickable');
+    }
 
     col.appendChild(chip);
     grid.appendChild(col);
