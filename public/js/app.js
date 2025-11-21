@@ -22,6 +22,7 @@ const PHONEME_AUDIO_EXT = '.mp3';
 // 从你提供的 IPA 对照表提取出来的映射：音标 -> 文件名（不含路径和后缀）
 const PHONEME_AUDIO_MAP = {
   'iː': '01_ee_see_words',
+  'i': '01_ee_see_words',
   'ɑː': '02_a_car_words',
   'ɔː': '03_o_ball_words',
   'uː': '04_oo_food_words',
