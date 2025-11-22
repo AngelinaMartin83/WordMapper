@@ -202,7 +202,7 @@ body.show-cost .tag.cost {
   .pair-col .ipa,
   .chip-p {
     font-size: clamp(12px, 3.5vw, 16px);
-    padding: clamp(1px, 0.6vw, 3px) clamp(3px, 1.6vw, 8px);
+    padding: clamp(1px, 0.6vw, 3px) clamp(3px, 1.6vw, 3px);
     border-radius: 14px;
     line-height: 1.2;
     white-space: nowrap;
