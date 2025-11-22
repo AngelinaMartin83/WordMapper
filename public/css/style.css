@@ -207,6 +207,8 @@ body.show-cost .tag.cost {
     line-height: 1.2;
     white-space: nowrap;   /* 单个音标不拆行 */
     flex-shrink: 0;
+     background: #f4a870 !important;   /* 单层橙色 */
+     box-shadow: none !important;
   }
 }
 /* 可点击的音标块 */
