@@ -149,39 +149,46 @@ body.show-cost .tag.cost {
 .card, .results, .pane { max-width: 100%; box-sizing: border-box; }
 .results { overflow-x: hidden; overflow-wrap: anywhere; }
 
-/* 手机端（≤768px） */
+/* 手机端（≤768px）专门优化字母+音标那块 */
 @media (max-width: 768px) {
 
-  /* 整体容器 */
+  /* 只允许音标区域横向滚动，外层 results 不需要整体居中 */
   .results {
-    overflow-x: hidden;
+    overflow-x: visible;
   }
 
-  /* ---- 音标区域：单行 + 横向滑动 ---- */
+  /* 音标整行，不换行，超出可左右滑动 */
   .pairs-grid {
-    display: inline-flex;       /* ⭐ 让内容宽度等于实际长度，短词可居中 */
-    flex-wrap: nowrap;          /* ⭐ 永不换行 */
-    gap: 10px;                  /* 每个字母/音标之间的空隙 */
-    overflow-x: auto;           /* ⭐ 超出即横向滑动 */
+    display: flex !important;        /* 覆盖桌面端的 grid 设置 */
+    flex-wrap: nowrap;               /* 不换行 */
+    gap: 10px;
+    margin-top: 14px;
+    margin-left: auto;
+    margin-right: auto;              /* 整块居中 */
+    padding-bottom: 6px;
+    overflow-x: auto;                /* ⭐ 只这一行可以左右滑动 */
     overflow-y: hidden;
-    padding-bottom: 6px;        /* 给滚动条留空间 */
-    white-space: nowrap;        /* ⭐ 关键：整行视为一行 */
-    -webkit-overflow-scrolling: touch; /* ⭐ iOS顺滑滚动 */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
   }
 
-  /* 让 pairs-grid 本身可居中（短词） */
-  .pane { text-align: center; }
-  .pairs-grid-wrapper { display: inline-block; }
-
-  /* ---- 单个字母 + 音标块 ---- */
+  /* 每个字母+音标的小块 */
   .pair-col {
     flex: 0 0 auto;
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
+
+    /* ⭐ 去掉“外层卡片”的背景和阴影，只保留字母块+音标块那一层 */
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
   }
 
+  /* 上面：字母方块 */
   .pair-col .g,
   .box-g {
     width: 40px;
@@ -191,13 +198,14 @@ body.show-cost .tag.cost {
     flex-shrink: 0;
   }
 
+  /* 下面：音标块 */
   .pair-col .ipa,
   .chip-p {
     font-size: 14px;
     padding: 4px 10px;
     border-radius: 14px;
     line-height: 1.2;
-    white-space: nowrap;      /* 单个 IPA 不折行 */
+    white-space: nowrap;   /* 单个音标不拆行 */
     flex-shrink: 0;
   }
 }
