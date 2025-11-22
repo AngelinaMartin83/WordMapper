@@ -153,62 +153,65 @@ body.show-cost .tag.cost {
 /* ============================================
    📱 最终整合版手机端样式（你只需这一段）
    ============================================ */
+/* ============================================
+   📱 手机端样式：字母+音标 居中 + 明显缩小
+   ============================================ */
 @media (max-width: 768px) {
 
-  /* ————— 布局保持和桌面端一致，不对整体居中 ————— */
+  /* 其他内容正常，不改整体排版 */
   .results {
     overflow-x: visible;
   }
 
-  /* ————— 音标显示区：横向排列 + 可左右滑动，不换行 ————— */
+  /* 音标区域：一行 + 可左右滑动 + 宽度占满方便居中 */
   .pairs-grid {
-    display: flex !important;         /* 覆盖桌面 Grid */
-    flex-wrap: nowrap;                /* 不换行 */
-    gap: 10px;
+    display: flex !important;       /* 覆盖桌面端 grid */
+    flex-wrap: nowrap;              /* 不换行 */
+    width: 100%;                    /* 让内部元素基于整行居中 */
+    justify-content: center;        /* ⭐ 居中显示 */
+    gap: 8px;
     margin-top: 14px;
     padding-bottom: 6px;
-    overflow-x: auto;
+    overflow-x: auto;               /* 超出时左右滑动 */
     overflow-y: hidden;
-    white-space: nowrap;              /* 整行不折行 */
+    white-space: nowrap;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* ————— 单个字母+音标块 ————— */
+  /* 每个字母+音标的小块 */
   .pair-col {
-    flex: 0 1 auto;                   /* 允许缩放（关键） */
+    flex: 0 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 
-    /* 去掉外层托盘背景与阴影，只保留一层 pill */
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
     padding: 0 !important;
   }
 
-  /* ————— 字母方块（自动缩放） ————— */
+  /* 字母方块：明显比桌面端小一号 */
   .pair-col .g,
   .box-g {
-    width: clamp(28px, 8vw, 40px);    /* 自动缩小：28–40px */
-    height: clamp(28px, 8vw, 40px);
-    font-size: clamp(14px, 4vw, 18px);
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
     border-radius: 8px;
     flex-shrink: 0;
   }
 
-  /* ————— 音标 pill（自动缩放 + 单层色） ————— */
+  /* 音标 pill：更窄、更小，仍然是单层橙色 */
   .pair-col .ipa,
   .chip-p {
-    font-size: clamp(12px, 3.5vw, 16px);
-    padding: clamp(1px, 0.6vw, 3px) clamp(3px, 1.6vw, 8px);
-    border-radius: 14px;
+    font-size: 11px;           /* ⭐ 字体直接变小 */
+    padding: 2px 6px;          /* ⭐ 左右间距明显减小 */
+    border-radius: 12px;
     line-height: 1.2;
     white-space: nowrap;
     flex-shrink: 0;
 
-    /* ⭐ 单层橙色 pill，避免“两层颜色” */
     background: #f4a870 !important;
     box-shadow: none !important;
   }
