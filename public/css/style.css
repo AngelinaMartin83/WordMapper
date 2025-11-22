@@ -160,6 +160,8 @@ body.show-cost .tag.cost {
     overflow-x: visible;
   }
 
+     /* H1 */
+h1{font-size: 18px;}
   /* ————— 音标显示区：横向排列 + 可左右滑动，不换行 ————— */
   .pairs-grid {
     display: flex !important;         /* 覆盖桌面 Grid */
