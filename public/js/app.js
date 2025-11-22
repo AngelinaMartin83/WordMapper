@@ -47,7 +47,7 @@ const PHONEME_AUDIO_MAP = {
   't':  '23_t_ten_words',
   'd':  '24_d_door_words',
   'k':  '25_k_cat_words',
-  'g':  '26_g_game_words',
+  'ɡ':  '26_g_game_words',
   'f':  '27_f_fish_words',
   'v':  '28_v_five_words',
   'θ':  '29_th_think_words',
