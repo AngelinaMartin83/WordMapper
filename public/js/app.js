@@ -73,6 +73,7 @@ const PHONEME_AUDIO_MAP = {
     'u': '49_short_oo_words',
     // ===== 你新錄的組合音 =====
   'juː': 'ju_long',
+  'ju': 'ju_short',
   'jʊ':  'jʊ',
   'jʊə': 'jʊə',
   'ʒʊə': 'ʒʊə',
