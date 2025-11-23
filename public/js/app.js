@@ -70,6 +70,7 @@ const PHONEME_AUDIO_MAP = {
   'dz': '46_dz_kids_words',
   'tr': '47_tr_tree_words',
   'ts': '48_ts_fruits_words',
+    'u': '49_short_oo_words',
     // ===== 你新錄的組合音 =====
   'juː': 'ju_long',
   'jʊ':  'jʊ',
