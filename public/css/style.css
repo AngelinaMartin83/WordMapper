@@ -226,3 +226,21 @@ h1{font-size: 18px;}
   transition: all 0.12s ease-out;
 }
 
+.whole-word-tts {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary-dark);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.12s ease-out, background-color 0.12s ease-out;
+}
+
+.whole-word-tts:hover {
+  color: #304fdc;
+  background: #eef3ff;
+}
+
+.whole-word-tts:focus-visible {
+  outline: 3px solid rgba(108, 141, 255, 0.35);
+  outline-offset: 4px;
+}

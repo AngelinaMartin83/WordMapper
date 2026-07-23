@@ -40,7 +40,7 @@
 │   └── favicon.ico            # 图标
 │
 ├── server-data/
-│   └── beep_uk_ipa.json       # 🔒 字典数据（服务端专用）
+│   └── beep_uk_ipa.json       # 🔒 custom learner UK IPA（服务端专用）
 │
 ├── package.json               # 项目依赖与脚本
 ├── next.config.js             # Next.js 配置
@@ -74,7 +74,7 @@ AUTH_TOKEN=（同样的强随机字符串）
 
 1. 用户访问首页 → `middleware.js` 自动生成安全 Cookie (`sid`)  
 2. 前端输入单词 → `public/js/app.js` 调用 `/api/align`  
-3. 接口验证 Cookie → 从 `server-data/beep_uk_ipa.json` 读取 IPA  
+3. 接口验证 Cookie → 从 `server-data/beep_uk_ipa.json` 读取 custom learner 的 UK IPA
 4. 使用 `lib/aligner.js` 执行对齐算法  
 5. 返回结果给前端渲染，无任何字典数据暴露
 
@@ -120,7 +120,8 @@ npm run dev
 ## 🧹 维护建议
 
 - **不再使用 `index.html`**（该文件已弃用，Next.js 用 `app/page.js` 渲染）
-- 更新字典时只需替换 `server-data/beep_uk_ipa.json`，无需改代码  
+- 当前 `beep_uk_ipa.json` 来自 custom learner 字典，并且只包含 UK IPA；
+  更新时应继续保持现有的 `word → [UK IPA]` 数据格式
 - 若出现 401，可检查：
   - Cookie 是否被禁用；
   - Vercel `AUTH_TOKEN` 是否与 `.env.local` 一致。

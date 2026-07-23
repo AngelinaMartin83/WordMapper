@@ -154,12 +154,100 @@ showDictInfoServer();
 // 在结果区域上做事件代理：点击音标块播放音频
 if (out) {
   out.addEventListener('click', (e) => {
+    const wordButton = e.target.closest('.whole-word-tts');
+    if (wordButton) {
+      speakWholeWord(wordButton.dataset.word);
+      return;
+    }
     // 找到最近的 .chip-p.clickable 元素
     const chip = e.target.closest('.chip-p.clickable');
     if (!chip) return;
+    if (chip.dataset.wordTts) {
+      speakWholeWord(chip.dataset.wordTts);
+      return;
+    }
     const phoneme = chip.dataset.phoneme;
     if (!phoneme) return;
     playPhoneme(phoneme);
+  });
+  out.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const wordButton = e.target.closest('.whole-word-tts');
+    const wholeWordChip = e.target.closest('.chip-p[data-word-tts]');
+    const spokenWord = wordButton?.dataset.word || wholeWordChip?.dataset.wordTts;
+    if (!spokenWord) return;
+    e.preventDefault();
+    speakWholeWord(spokenWord);
+  });
+}
+
+const UK_VOICE_NAMES = [
+  'Daniel',
+  'Oliver',
+  'Arthur',
+  'Serena',
+  'Kate',
+  'Martha',
+  'Google UK English Male',
+  'Google UK English Female',
+  'Microsoft Ryan Online',
+  'Microsoft George',
+  'Microsoft Sonia Online',
+  'Microsoft Libby Online',
+  'Microsoft Hazel',
+  'Microsoft Susan'
+];
+
+function getPreferredUkVoiceSync() {
+  if (!('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  const ukVoices = voices.filter(voice => /^en[-_]GB(?:$|[-_])/i.test(voice.lang));
+  for (const name of UK_VOICE_NAMES) {
+    const voice = ukVoices.find(item => item.name === name)
+      || ukVoices.find(item => item.name.includes(name));
+    if (voice) return voice;
+  }
+  return ukVoices[0]
+    || voices.find(voice => /^en[-_]/i.test(voice.lang))
+    || null;
+}
+
+function getPreferredUkVoice() {
+  const immediate = getPreferredUkVoiceSync();
+  if (immediate) return Promise.resolve(immediate);
+  return new Promise(resolve => {
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      window.speechSynthesis.removeEventListener?.('voiceschanged', finish);
+      resolve(getPreferredUkVoiceSync());
+    };
+    window.speechSynthesis.addEventListener?.('voiceschanged', finish);
+    window.setTimeout(finish, 800);
+  });
+}
+
+async function speakWholeWord(word) {
+  const text = String(word || '').trim();
+  if (!text) return false;
+  if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
+    alert('当前浏览器不支持整词发音');
+    return false;
+  }
+
+  const voice = await getPreferredUkVoice();
+  return new Promise(resolve => {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-GB';
+    if (voice) utterance.voice = voice;
+    utterance.volume = 1;
+    utterance.pitch = 1;
+    utterance.rate = 1;
+    utterance.onend = () => resolve(true);
+    utterance.onerror = () => resolve(false);
+    window.speechSynthesis.speak(utterance);
   });
 }
 async function runAll(){
@@ -226,7 +314,7 @@ function card(word, ipaDisplay, res, error){
   head.style.display = 'flex'; 
   head.style.justifyContent = 'space-between'; 
   head.style.alignItems = 'center';
-  head.innerHTML = `<div style="font-size:28px;font-weight:900">${esc(word)}</div>` +
+  head.innerHTML = `<div class="whole-word-tts" data-word="${esc(word)}" role="button" tabindex="0" title="点击播放英式整词发音" aria-label="播放 ${esc(word)} 的英式整词发音" style="font-size:28px;font-weight:900">${esc(word)}</div>` +
                  (res && window.__SHOW_COST__ ? `<span class="tag cost">总代价 cost = ${res.cost}</span>` : '');
   pad.appendChild(head);
 
@@ -245,6 +333,14 @@ function card(word, ipaDisplay, res, error){
 
   const grid = document.createElement('div');
   grid.className = 'pairs-grid';
+
+  const pronouncedPairs = res.pairs.filter(row => {
+    const [grapheme, phoneme, operation] = row;
+    return grapheme && phoneme && phoneme !== '（沉默）'
+      && operation !== 'del' && operation !== 'ins';
+  });
+  const isWholeWordMapping = pronouncedPairs.length === 1
+    && pronouncedPairs[0][0].toLowerCase() === word.toLowerCase();
 
   for (const row of res.pairs) {
     const [g, p, op] = row.length === 3 ? row : [row[0], row[1], null];
@@ -274,6 +370,13 @@ function card(word, ipaDisplay, res, error){
       // 正常有音标：展示并挂上 data-phoneme，供点击播放
       chip.innerHTML = `<span class="ipa">/${esc(p)}/</span>`;
       chip.dataset.phoneme = p;
+      if (isWholeWordMapping && row === pronouncedPairs[0]) {
+        chip.dataset.wordTts = word;
+        chip.title = `点击播放 ${word} 的英式整词发音`;
+        chip.setAttribute('aria-label', `播放 ${word} 的英式整词发音`);
+        chip.setAttribute('role', 'button');
+        chip.tabIndex = 0;
+      }
       chip.classList.add('clickable');
     }
 
