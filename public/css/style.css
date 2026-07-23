@@ -90,6 +90,12 @@ body.show-cost .tag.cost {
 }
 .box-g.muted{opacity:.5}
 .box-g.insert{outline:2px dashed #d0d7ff}
+.box-g.separator{
+  border-color:transparent;
+  background:transparent;
+  color:#8a94a8;
+  font-size:20px;
+}
 
 /* 下排：发音贴纸 */
 .row-phonemes{display:flex;flex-wrap:wrap;gap:12px}

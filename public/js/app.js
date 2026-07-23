@@ -350,9 +350,13 @@ function card(word, ipaDisplay, res, error){
 
     const gBox = document.createElement('div');
     gBox.className = 'box-g';
-    gBox.textContent = g || '∅';
+    gBox.textContent = op === 'sep' && /\s/u.test(g) ? '␠' : (g || '∅');
     if (op === 'del') gBox.classList.add('muted');
     if (op === 'ins') gBox.classList.add('insert');
+    if (op === 'sep') {
+      gBox.classList.add('separator');
+      gBox.title = /\s/u.test(g) ? '空格分隔符' : '连字符分隔符';
+    }
     col.appendChild(gBox);
 
         const chip = document.createElement('div');
