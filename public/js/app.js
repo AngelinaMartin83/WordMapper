@@ -67,7 +67,6 @@ const PHONEME_AUDIO_MAP = {
   'j':  '43_j_yes_words',
   'w':  '44_w_what_words',
   'dr': '45_dr_drink_words',
-  'dz': '46_dz_kids_words',
   'tr': '47_tr_tree_words',
   'ts': '48_ts_fruits_words',
     'u': '49_short_oo_words',
@@ -78,13 +77,9 @@ const PHONEME_AUDIO_MAP = {
   'jʊə': 'jʊə',
   'ʒʊə': 'ʒʊə',
   'ks':  'ks',
-  'ɡz':  'ɡz',
-  'eks': 'eks',
-  'kʃ':  'kʃ',
   'əl':  'əl',
   'ɪd':  'ɪd',
   'kw':  'kw',
-  'sk':  'sk',
   'ɪŋ':  'ɪŋ',
   'əs':  'əs',
   'ɑːf':'ɑ_long_f',
@@ -101,33 +96,80 @@ const PHONEME_AUDIO_MAP = {
   'ɪzəm':'ɪzəm',
   'æzəm':'æzəm',
   'ɪdʒ':'ɪdʒ',
-  'ɡw': 'gw',
+};
+
+const PHONEME_SEQUENCE_MAP = {
+  'gw': ['g', 'w'],
+  'ɡw': ['ɡ', 'w'],
+  'dz': ['d', 'z'],
+  'ɡz': ['ɡ', 'z'],
+  'gz': ['g', 'z'],
+  'kʃ': ['k', 'ʃ'],
+  'sk': ['s', 'k'],
+  'eks': ['e', 'ks'],
 };
 
 // 复用一个 Audio 实例，避免多音频叠加
 let phonemeAudio = null;
+let phonemeAudioResolve = null;
+let phonemeSequenceToken = 0;
 
 function getPhonemeAudioUrl(phoneme) {
-  const key = String(phoneme || '').trim();
+  const key = String(phoneme || '').trim().replace(/^g$/u, 'ɡ');
   if (!key) return null;
   const fileKey = PHONEME_AUDIO_MAP[key];
   if (!fileKey) return null;
   return PHONEME_AUDIO_BASE + fileKey + PHONEME_AUDIO_EXT;
 }
 
-function playPhoneme(phoneme) {
+function playPhonemeAudioUnit(phoneme) {
   const url = getPhonemeAudioUrl(phoneme);
-  if (!url) return;
-  try {
-    if (!phonemeAudio) phonemeAudio = new Audio();
-    phonemeAudio.src = url;
-    phonemeAudio.currentTime = 0;
-    phonemeAudio.play().catch(() => {
-      console.warn('无法播放音标音频：', phoneme, url);
-    });
-  } catch (e) {
-    console.warn('播放音频出错：', e);
+  if (!url) return Promise.resolve(false);
+  return new Promise(resolve => {
+    try {
+      if (!phonemeAudio) phonemeAudio = new Audio();
+      if (phonemeAudioResolve) phonemeAudioResolve(false);
+      phonemeAudio.pause();
+      phonemeAudioResolve = resolve;
+      const finish = played => {
+        if (phonemeAudioResolve !== resolve) return;
+        phonemeAudioResolve = null;
+        resolve(played);
+      };
+      phonemeAudio.src = url;
+      phonemeAudio.currentTime = 0;
+      phonemeAudio.onended = () => finish(true);
+      phonemeAudio.onerror = () => finish(false);
+      const playback = phonemeAudio.play();
+      if (playback && typeof playback.catch === 'function') {
+        playback.catch(() => finish(false));
+      }
+    } catch (error) {
+      phonemeAudioResolve = null;
+      console.warn('播放音频出错：', error);
+      resolve(false);
+    }
+  });
+}
+
+async function playPhoneme(phoneme) {
+  const key = String(phoneme || '').trim();
+  const sounds = PHONEME_SEQUENCE_MAP[key] || [key];
+  phonemeSequenceToken += 1;
+  const token = phonemeSequenceToken;
+  for (const sound of sounds) {
+    if (token !== phonemeSequenceToken) return false;
+    if (!await playPhonemeAudioUnit(sound)) {
+      console.warn('无法播放音标音频：', sound);
+      return false;
+    }
   }
+  return true;
+}
+
+function formatPhonemeMapping(phoneme) {
+  const key = String(phoneme || '').trim();
+  return (PHONEME_SEQUENCE_MAP[key] || [key]).join(' + ');
 }
 function esc(s){
   const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -372,7 +414,7 @@ function card(word, ipaDisplay, res, error){
       chip.innerHTML = '';
     } else {
       // 正常有音标：展示并挂上 data-phoneme，供点击播放
-      chip.innerHTML = `<span class="ipa">/${esc(p)}/</span>`;
+      chip.innerHTML = `<span class="ipa">/${esc(formatPhonemeMapping(p))}/</span>`;
       chip.dataset.phoneme = p;
       if (isWholeWordMapping && row === pronouncedPairs[0]) {
         chip.dataset.wordTts = word;
